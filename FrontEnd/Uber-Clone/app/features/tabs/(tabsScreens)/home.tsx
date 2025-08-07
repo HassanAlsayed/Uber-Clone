@@ -1,13 +1,30 @@
-import '@/global.css'
-import { Text } from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context';
- 
-export default function Home() {
+//import { SignOutButton } from "@/components/SignOutButton";
+import { useUser, SignedIn, SignedOut } from "@clerk/clerk-expo";
+import { Link } from "expo-router";
+import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+const Home =() => {
+
+  const {user}=useUser();
+  console.log(user);
+  
   return (
-    <SafeAreaView className="flex-1 items-center justify-center bg-white">
-      <Text className="text-xl font-bold text-red-500">
-        Welcome to Nativewind!
-      </Text>
+    <SafeAreaView>
+      <SignedIn>
+          <Text>Hello {user?.username}</Text>
+      </SignedIn>
+      {/* <SignedOut>
+        <Link href="/sign-in">
+          <Text>Sign In</Text>
+        </Link>
+        <Link href="/sign-up">
+          <Text>Sign up</Text>
+        </Link>
+      </SignedOut> */}
     </SafeAreaView>
+
   );
-}
+};
+
+export default Home;

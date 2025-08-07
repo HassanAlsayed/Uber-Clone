@@ -1,6 +1,8 @@
 import { useFonts } from 'expo-font';
 import { Slot } from 'expo-router';
 import 'react-native-reanimated';
+import { ClerkProvider, ClerkLoaded } from "@clerk/clerk-expo";
+import { tokenCache } from "@clerk/clerk-expo/token-cache";
 
 
 export default function RootLayout() {
@@ -14,12 +16,18 @@ export default function RootLayout() {
     "Jakarta-SemiBold": require("../assets/fonts/PlusJakartaSans-SemiBold.ttf"),
   });
 
+  const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
   if (!loaded) {
     // Async font loading only occurs in development.
     return null;
   }
 
   return (
-    <Slot />
+     <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+      <ClerkLoaded>
+          <Slot />
+     </ClerkLoaded>
+    </ClerkProvider>
   );
 }

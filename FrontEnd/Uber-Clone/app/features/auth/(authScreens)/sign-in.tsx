@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { useState } from "react";
 import {
     Image,
@@ -14,12 +14,32 @@ import {
 } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import OAuth from "../components/oAuth";
+import { useSignIn } from "@clerk/clerk-expo";
 
 const SignIn = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+
+  const { signIn, setActive, isLoaded } = useSignIn();
+
+  const onSignInPress = async () => {
+    if (!isLoaded) return;
+    try {
+      const result = await signIn.create({
+        identifier: form.email,
+        password: form.password,
+      });
+      if (result.status === "complete") {
+        await setActive({ session: result.createdSessionId });
+        router.navigate('/features/tabs/(tabsScreens)/home');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
 
 
   return (
@@ -58,7 +78,7 @@ const SignIn = () => {
                   email: value,
                 }))
               }
-              textContentType='emailAddress'
+              keyboardType='email-address'
               className={`rounded-full p-4 font-JakartaSemiBold text-[15px]
                     flex-1  text-left`}
             />
@@ -82,7 +102,7 @@ const SignIn = () => {
            </View>
           </View>
            <TouchableOpacity
-      //onPress={handleSignOut}
+      onPress={onSignInPress}
       className="bg-primary-500 p-4 rounded-full mx-2"
     >
       <Text className="text-white text-md text-center font-semibold">Sign In</Text>
