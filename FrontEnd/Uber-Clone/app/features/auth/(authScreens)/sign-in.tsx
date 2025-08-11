@@ -1,4 +1,4 @@
-import { Link, router } from "expo-router";
+import { Link, Redirect, router } from "expo-router";
 import { useState } from "react";
 import {
     Image,
@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import OAuth from "../components/oAuth";
-import { useSignIn } from "@clerk/clerk-expo";
+import { useAuth, useSignIn } from "@clerk/clerk-expo";
 
 const SignIn = () => {
   const [form, setForm] = useState({
@@ -23,6 +23,9 @@ const SignIn = () => {
   });
 
   const { signIn, setActive, isLoaded } = useSignIn();
+  const {isSignedIn} = useAuth();
+
+  if(isSignedIn) return <Redirect href={'/features/tabs/(tabsScreens)/home'}/>
 
   const onSignInPress = async () => {
     if (!isLoaded) return;
@@ -39,8 +42,6 @@ const SignIn = () => {
       console.error(err);
     }
   };
-
-
 
   return (
     <KeyboardAvoidingView

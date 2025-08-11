@@ -18,6 +18,7 @@
   import { useSignUp } from "@clerk/clerk-expo";
   import ReactNativeModal from "react-native-modal";
   import Toast from 'react-native-root-toast';
+import { fetchAPI } from "../../lib/fetch";
 
   const SignUp = () => {
     const [form, setForm] = useState({
@@ -64,6 +65,14 @@
           code: verification.code,
         });
         if (result.status === "complete") {
+          await fetchAPI('/features/(api)/user',{
+            method:'POST',
+            body:JSON.stringify({
+              name:form.name,
+              email:form.email,
+              clerkId: result.createdUserId
+            }),
+          })
           await setActive({ session: result.createdSessionId });
           setVerification({ ...verification, state: "success", error: "" });
         } else {
@@ -194,8 +203,7 @@
               placeholder="1234"
                 value={verification.code}
                 keyboardType="numeric"
-                  maxLength={6}
-
+                maxLength={6}
                 onChangeText={(code) => setVerification({ ...verification, code })}
               />
             </View>
