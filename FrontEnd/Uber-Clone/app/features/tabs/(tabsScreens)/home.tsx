@@ -4,11 +4,11 @@ import { Link, router } from "expo-router";
 import { ActivityIndicator, FlatList, Image, Linking, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import RideCard from "../components/rideCard";
-import GoogleTextInput from "../components/googleTextInput";
 import Map from "../components/map";
 import * as Location from "expo-location"
 import { useEffect, useState } from "react";
 import { useLocationStore } from "../store";
+import LocationSearch from "../components/locationSearch";
 
 const recentRides=
   [
@@ -155,7 +155,14 @@ const handleSignOut = async() =>{
     }
 }
 
- const handelDestenationPress= ()=>{};
+  const onLocationSelected = (location: {
+    latitude: number;
+    longitude: number;
+    address: string;
+  }) => {
+    setDestinationLocation(location);
+    router.push('/features/tabs/findRide');
+  };
   return (
     <SafeAreaView className="bg-general-500">
 
@@ -191,11 +198,8 @@ const handleSignOut = async() =>{
             <Image source={require('@/assets/icons/out.png')} className="w-4 h-4"/>
          </TouchableOpacity>
         </View>
-        {/* <GoogleTextInput
-          icon={require('@/assets/icons/search.png')}
-          containerStyle="bg-white shadow-md shadow-neutral-300"
-          handlePress={handelDestenationPress}
-        /> */}
+        <LocationSearch onLocationSelect={onLocationSelected} />
+
         
           <Text className="text-xl font-JakartaBold mt-5 mb-3">
             Your Current Location

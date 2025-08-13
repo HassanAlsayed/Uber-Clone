@@ -9,24 +9,23 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyAtux5gMp5yUEucMtp1Vmq01Bj8mAIycqo"
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/favicon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
-      "permissions": [
-        "ACCESS_FINE_LOCATION",
-        "ACCESS_COARSE_LOCATION"
-      ],
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyBKMdGS4qLOmrT0KyGhDPYOsYzlqfhkm0w"
+          "apiKey": "AIzaSyAiPnNooRpMmklOdHXh3b0zfiujp4dbdUc"
         }
       },
-      "package": "com.anonymous.UberClone"
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
+      "edgeToEdgeEnabled": true
     },
     "web": {
       "bundler": "metro",
@@ -47,6 +46,9 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "googleApiKey": "AIzaSyAiPnNooRpMmklOdHXh3b0zfiujp4dbdUc"
     }
   }
 }

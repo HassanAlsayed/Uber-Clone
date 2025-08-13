@@ -102,4 +102,10 @@ declare interface Driver {
     car_seats: number;
     rating: number;
 }
-export {Ride,GoogleInputProps,LocationStore,DriverStore,MarkerData,Driver}
+
+declare interface DriverCardProps {
+    item: MarkerData;
+    selected: number;
+  setSelected: (id: number) => void; 
+}
+export {Ride,GoogleInputProps,LocationStore,DriverStore,MarkerData,Driver,DriverCardProps}
