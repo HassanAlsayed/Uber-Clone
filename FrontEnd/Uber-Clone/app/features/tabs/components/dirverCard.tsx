@@ -1,8 +1,11 @@
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { DriverCardProps } from "../types/types";
+import { useRidePriceTime } from "../store";
 
 const DriverCard = ({ item, selected, setSelected }: DriverCardProps) => {
+
+  const {ride_time,fare_price} = useRidePriceTime();
   return (
     <TouchableOpacity
       onPress={() => setSelected(item.id)}
@@ -31,7 +34,10 @@ const DriverCard = ({ item, selected, setSelected }: DriverCardProps) => {
               style={{ width: 14, height: 14, tintColor: "orange", marginRight: 4 }}
             />
             <Text style={{ fontSize: 14, fontWeight: "600" }}>
-              {item.rating.toFixed(1)}
+              {(() => {
+                const ratingNum = typeof item.rating === 'number' ? item.rating : parseFloat(String(item.rating ?? ''));
+                return isNaN(ratingNum) ? '-' : ratingNum.toFixed(1);
+              })()}
             </Text>
           </View>
 
@@ -40,9 +46,11 @@ const DriverCard = ({ item, selected, setSelected }: DriverCardProps) => {
               source={require('@/assets/icons/dollar.png')}
               style={{ width: 14, height: 14, marginRight: 3 }}
             />
-            <Text style={{ fontSize: 12, color: "#555" }}>${item.price} </Text>
+            <Text style={{ fontSize: 12, color: "#555" }}>
+              {fare_price.toFixed(2)}$
+            </Text>
 
-            <Text style={{ fontSize: 12, color: "#555" }}>| {item.time} min </Text>
+            <Text style={{ fontSize: 12, color: "#555" }}>|  {ride_time } min </Text>
             <Text style={{ fontSize: 12, color: "#555" }}>| {item.car_seats} seats</Text>
           </View>
         </View>

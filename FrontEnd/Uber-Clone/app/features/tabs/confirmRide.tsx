@@ -4,10 +4,9 @@ import DriverCard from "./components/dirverCard";
 import RideLayout from "./components/rideLayout";
 import { useDriverStore } from "./store";
 import { MarkerData } from "./types/types";
-import { useEffect } from "react";
 
 const ConfirmRide = () => {
-  const { drivers, selectedDriver, setSelectedDriver,setDrivers } = useDriverStore();
+  const { drivers, selectedDriver, setSelectedDriver } = useDriverStore();
 const Drivers: MarkerData[] = [
   {
     id: 1,
@@ -67,10 +66,6 @@ const Drivers: MarkerData[] = [
   },
 ];
 
-useEffect(() =>{
-setDrivers(Drivers);
-
-},[])
   return (
     <RideLayout title={"Choose a Rider"} snapPoints={["65%", "85%"]}>
       <FlatList

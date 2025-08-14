@@ -3,7 +3,6 @@ import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
 import RideLayout from "@/app/features/tabs/components/rideLayout";
 import { useLocationStore } from "@/app/features/tabs/store";
-import LocationSearch from "./components/locationSearch";
 
 const FindRide = () => {
   const {

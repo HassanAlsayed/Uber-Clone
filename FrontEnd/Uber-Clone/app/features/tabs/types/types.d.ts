@@ -108,4 +108,20 @@ declare interface DriverCardProps {
     selected: number;
   setSelected: (id: number) => void; 
 }
-export {Ride,GoogleInputProps,LocationStore,DriverStore,MarkerData,Driver,DriverCardProps}
+
+declare interface PaymentProps {
+    fullName: string;
+    email: string;
+    amount: number;
+    driverId: number;
+    rideTime: number;
+}
+
+type RideStore = {
+  fare_price: number;
+  ride_time: number;
+  setRidePrice: (fare_price: number) => void;
+  setRideTime: (ride_time: number) => void;
+}
+
+export {Ride,GoogleInputProps,LocationStore,DriverStore,MarkerData,Driver,DriverCardProps,PaymentProps,RideStore}

@@ -1,20 +1,31 @@
 import { Image, Text, View } from "react-native";
-
 import RideLayout from '@/app/features/tabs/components/rideLayout';
 import { formatTime } from "@/app/features/lib/utils";
-import { useDriverStore, useLocationStore } from '@/app/features/tabs/store';
+import { useDriverStore, useLocationStore, useRidePriceTime } from '@/app/features/tabs/store';
+import { StripeProvider } from "@stripe/stripe-react-native";
+import Payment from "./components/payment";
+import { useUser } from "@clerk/clerk-expo";
 
 const BookRide = () => {
   const { userAddress, destinationAddress } = useLocationStore();
   const { drivers, selectedDriver } = useDriverStore();
+  const {fare_price,ride_time} = useRidePriceTime();
 
   const driverDetails = drivers?.filter(
-    (driver) => +driver.id === selectedDriver,
+    (driver) => driver.id === selectedDriver,
   )[0];
 
+  const {user} = useUser();
+
   return (
+
+      <StripeProvider
+      publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!}
+      merchantIdentifier="merchant.com.uber"
+      urlScheme="uberclone"
+    >
    
-      <RideLayout title="Book Ride" snapPoints={['85%']}>
+      <RideLayout title="Book Ride" snapPoints={['70%']}>
         <>
           <Text className="text-xl font-JakartaSemiBold mb-3">
             Ride Information
@@ -45,24 +56,25 @@ const BookRide = () => {
           </View>
 
           <View className="flex flex-col w-full items-start justify-center py-3 px-5 rounded-3xl bg-general-600 mt-5">
+
             <View className="flex flex-row items-center justify-between w-full border-b border-white py-3">
               <Text className="text-lg font-JakartaRegular">Ride Price</Text>
               <Text className="text-lg font-JakartaRegular text-[#0CC25F]">
-                ${driverDetails?.price}
-              </Text>
+                ${fare_price}
+              </Text> 
             </View>
 
             <View className="flex flex-row items-center justify-between w-full border-b border-white py-3">
               <Text className="text-lg font-JakartaRegular">Pickup Time</Text>
               <Text className="text-lg font-JakartaRegular">
-                {formatTime(driverDetails?.time! || 5!)}
+                {formatTime(ride_time)}
               </Text>
             </View>
 
             <View className="flex flex-row items-center justify-between w-full py-3">
               <Text className="text-lg font-JakartaRegular">Car Seats</Text>
               <Text className="text-lg font-JakartaRegular">
-                {driverDetails?.car_seats}
+                {driverDetails?.car_seats || 4!}
               </Text>
             </View>
           </View>
@@ -82,10 +94,17 @@ const BookRide = () => {
               </Text>
             </View>
           </View>
-
+         <Payment
+            fullName={user?.fullName!}
+            email={user?.emailAddresses[0].emailAddress!}
+            amount= {fare_price}
+            driverId={driverDetails?.id ?? 0} 
+            rideTime={ride_time}
+          />
          
         </>
       </RideLayout>
+      </StripeProvider>
   );
 };
 

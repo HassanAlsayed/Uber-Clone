@@ -6,9 +6,6 @@ export async function POST(request : Request){
 
     const {name,email,clerkId} = await request.json();
 
-    console.log(name,email,clerkId);
-    
-
     if(!name || !email || !clerkId){
       console.log('Missing required fields');
       return Response.json({error:"Missing Required Fields"},{status:400})

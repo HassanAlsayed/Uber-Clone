@@ -1,8 +1,23 @@
 import { useCallback, useEffect, useState } from "react";
+import Constants from "expo-constants";
+import { Platform } from "react-native";
+
+const resolveUrl = (url: string) => {
+  if (/^https?:\/\//i.test(url)) return url;
+
+  // Resolve relative URLs to the Expo dev server host on native
+  const hostUri = (Constants.expoConfig as any)?.hostUri as string | undefined;
+  if (Platform.OS !== "web" && hostUri) {
+    const normalizedPath = url.replace(/^\//, "");
+    return `http://${hostUri}/${normalizedPath}`;
+  }
+
+  return url; // web or fallback
+};
 
 export const fetchAPI = async (url: string, options?: RequestInit) => {
   try {
-    const response = await fetch(url, options);
+    const response = await fetch(resolveUrl(url), options);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
